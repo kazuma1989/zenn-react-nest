@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 
 export function App() {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(!false)
   const toggleOpen = () => {
     setOpen((v) => !v)
   }
@@ -39,13 +39,32 @@ export function App() {
           </button>
 
           <Dropdown.Menu open={open}>
-            <Dropdown.ItemText>メニュー</Dropdown.ItemText>
+            <Dropdown.Space>メニュー</Dropdown.Space>
 
-            <Dropdown.ItemAnchor href="#">Action</Dropdown.ItemAnchor>
+            <Dropdown.Header>メニュー</Dropdown.Header>
+
+            <Dropdown.ItemAnchor
+              href="#"
+              style={{
+                paddingInlineStart: 32,
+              }}
+            >
+              Action
+            </Dropdown.ItemAnchor>
 
             <Dropdown.ItemAnchor href="#">Another action</Dropdown.ItemAnchor>
 
+            <Dropdown.ItemText>メニュー</Dropdown.ItemText>
+
+            <Dropdown.Divider />
+
             <Dropdown.ItemButton>Something else here</Dropdown.ItemButton>
+
+            <Dropdown.Space>
+              <button type="button" className="btn btn-outline-secondary">
+                なんかボタン
+              </button>
+            </Dropdown.Space>
           </Dropdown.Menu>
         </Dropdown>
       </div>
@@ -294,10 +313,14 @@ Dropdown.Menu = function ({
   open?: boolean
   children?: React.ReactNode
 }) {
-  return <ul className={`dropdown-menu ${open ? "show" : ""}`}>{children}</ul>
+  return (
+    <div className={`dropdown-menu dropdown-menu-right ${open ? "show" : ""}`}>
+      {children}
+    </div>
+  )
 }
 
-type ItemProps = {
+type InteractiveItemProps = {
   active?: boolean
   disabled?: boolean
 }
@@ -306,16 +329,14 @@ Dropdown.ItemAnchor = function ({
   active,
   disabled,
   ...props
-}: JSX.IntrinsicElements["a"] & ItemProps) {
+}: JSX.IntrinsicElements["a"] & InteractiveItemProps) {
   return (
-    <li>
-      <a
-        className={`dropdown-item ${active ? "active" : ""} ${
-          disabled ? "disabled" : ""
-        }`}
-        {...props}
-      />
-    </li>
+    <a
+      className={`dropdown-item ${active ? "active" : ""} ${
+        disabled ? "disabled" : ""
+      }`}
+      {...props}
+    />
   )
 }
 
@@ -323,24 +344,30 @@ Dropdown.ItemButton = function ({
   active,
   disabled,
   ...props
-}: JSX.IntrinsicElements["button"] & ItemProps) {
+}: JSX.IntrinsicElements["button"] & InteractiveItemProps) {
   return (
-    <li>
-      <button
-        type="button"
-        className={`dropdown-item ${active ? "active" : ""} ${
-          disabled ? "disabled" : ""
-        }`}
-        {...props}
-      />
-    </li>
+    <button
+      type="button"
+      className={`dropdown-item ${active ? "active" : ""} ${
+        disabled ? "disabled" : ""
+      }`}
+      {...props}
+    />
   )
 }
 
 Dropdown.ItemText = function ({ ...props }: JSX.IntrinsicElements["span"]) {
-  return (
-    <li>
-      <span className="dropdown-item-text" {...props} />
-    </li>
-  )
+  return <span className="dropdown-item-text" {...props} />
+}
+
+Dropdown.Header = function ({ ...props }: JSX.IntrinsicElements["h6"]) {
+  return <h6 className="dropdown-header" {...props} />
+}
+
+Dropdown.Divider = function () {
+  return <hr className="dropdown-divider" />
+}
+
+Dropdown.Space = function ({ ...props }: JSX.IntrinsicElements["div"]) {
+  return <div className="px-3 py-1" {...props} />
 }
