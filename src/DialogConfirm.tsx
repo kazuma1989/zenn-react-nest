@@ -1,5 +1,5 @@
 import React from "react"
-import { Dialog } from "./Dialog_2"
+import { Dialog } from "./Dialog"
 
 export function DialogConfirm({
   label = "はい",

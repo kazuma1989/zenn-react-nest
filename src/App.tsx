@@ -1,9 +1,9 @@
 import React, { useState } from "react"
+import { Dialog } from "./Dialog"
 import { DialogConfirm } from "./DialogConfirm"
 import { Dialog as Dialog_1 } from "./Dialog_1"
-import { Dialog } from "./Dialog_2"
+import { Dropdown } from "./Dropdown"
 import { Dropdown as Dropdown_1 } from "./Dropdown_1"
-import { Dropdown } from "./Dropdown_2"
 
 export function App() {
   const [open1, setOpen1] = useState(true)
