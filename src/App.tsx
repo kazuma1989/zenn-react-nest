@@ -29,7 +29,7 @@ export function App() {
           </a>
         </nav>
 
-        <div className="dropdown">
+        <Dropdown>
           <button
             type="button"
             className="btn btn-outline-primary dropdown-toggle"
@@ -38,26 +38,16 @@ export function App() {
             @kazuma1989 さん
           </button>
 
-          <ul className={`dropdown-menu ${open ? "show" : ""}`}>
-            <li>
-              <a className="dropdown-item" href="#">
-                Action
-              </a>
-            </li>
+          <Dropdown.Menu open={open}>
+            <Dropdown.ItemText>メニュー</Dropdown.ItemText>
 
-            <li>
-              <a className="dropdown-item" href="#">
-                Another action
-              </a>
-            </li>
+            <Dropdown.ItemAnchor href="#">Action</Dropdown.ItemAnchor>
 
-            <li>
-              <a className="dropdown-item" href="#">
-                Something else here
-              </a>
-            </li>
-          </ul>
-        </div>
+            <Dropdown.ItemAnchor href="#">Another action</Dropdown.ItemAnchor>
+
+            <Dropdown.ItemButton>Something else here</Dropdown.ItemButton>
+          </Dropdown.Menu>
+        </Dropdown>
       </div>
 
       <div
@@ -290,5 +280,67 @@ export function App() {
         </footer>
       </div>
     </div>
+  )
+}
+
+function Dropdown({ children }: { children?: React.ReactNode }) {
+  return <div className="dropdown">{children}</div>
+}
+
+Dropdown.Menu = function ({
+  open,
+  children,
+}: {
+  open?: boolean
+  children?: React.ReactNode
+}) {
+  return <ul className={`dropdown-menu ${open ? "show" : ""}`}>{children}</ul>
+}
+
+type ItemProps = {
+  active?: boolean
+  disabled?: boolean
+}
+
+Dropdown.ItemAnchor = function ({
+  active,
+  disabled,
+  ...props
+}: JSX.IntrinsicElements["a"] & ItemProps) {
+  return (
+    <li>
+      <a
+        className={`dropdown-item ${active ? "active" : ""} ${
+          disabled ? "disabled" : ""
+        }`}
+        {...props}
+      />
+    </li>
+  )
+}
+
+Dropdown.ItemButton = function ({
+  active,
+  disabled,
+  ...props
+}: JSX.IntrinsicElements["button"] & ItemProps) {
+  return (
+    <li>
+      <button
+        type="button"
+        className={`dropdown-item ${active ? "active" : ""} ${
+          disabled ? "disabled" : ""
+        }`}
+        {...props}
+      />
+    </li>
+  )
+}
+
+Dropdown.ItemText = function ({ ...props }: JSX.IntrinsicElements["span"]) {
+  return (
+    <li>
+      <span className="dropdown-item-text" {...props} />
+    </li>
   )
 }
