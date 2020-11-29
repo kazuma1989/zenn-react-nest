@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    // Target latest browsers
+    "target": "ES2020",
+    "lib": ["ES2020", "DOM"],
+
+    // Required: Use module="ESNext" so that TS won't compile/disallow any ESM syntax.
+    // Required: for some packages.
+    "module": "ESNext",
+    "moduleResolution": "Node",
+
+    // <div /> => React.createElement("div")
+    // `import React` instead of `import * as React`
+    "jsx": "react",
+    "allowSyntheticDefaultImports": true,
+
+    // Only check our sources. No output.
+    "noEmit": true,
+    "skipLibCheck": true,
+
+    // Useful type checks.
+    "strictNullChecks": true
+  },
+
+  "include": ["./src/**/*"]
+}

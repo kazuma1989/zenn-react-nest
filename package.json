@@ -1,24 +1,31 @@
 {
   "name": "zenn-react-nest",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "author": "kazuma1989 <kazuma.ebina@quipper.com>",
+  "description": "「複雑な React コンポーネントをネストで表現する」の検証用",
+  "license": "MIT",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "npm-run-all --parallel serve:dev build:dev check:dev",
+    "serve:dev": "servor ./public index.html ${PORT:-3000} --silent --reload",
+    "build:dev": "node build development",
+    "check:dev": "tsc --watch",
+    "build": "node build production",
+    "test": "npm-run-all --parallel check format",
+    "check": "tsc",
+    "format": "prettier --write './src/**/*.{ts,tsx}'"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "dependencies": {
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
+  },
   "devDependencies": {
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "chokidar": "^3.4.3",
     "esbuild": "^0.8.16",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.2.1",
     "servor": "^4.0.2",
     "typescript": "^4.1.2"
-  },
-  "dependencies": {
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1"
   }
 }
