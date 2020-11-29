@@ -41,6 +41,11 @@ export function App() {
             @kazuma1989 さん
           </button>
 
+        <Dropdown>
+          <Dropdown.Button className="btn-outline-primary" onClick={toggleOpen}>
+            @kazuma1989 さん
+          </Dropdown.Button>
+
           <Dropdown.Menu open={open} onAction={close}>
             <Dropdown.MenuSpace>なんでも置ける</Dropdown.MenuSpace>
 
@@ -315,6 +320,19 @@ export function App() {
 
 function Dropdown({ children }: { children?: React.ReactNode }) {
   return <div className="dropdown">{children}</div>
+}
+
+Dropdown.Button = function ({
+  className,
+  ...props
+}: JSX.IntrinsicElements["button"]) {
+  return (
+    <button
+      type="button"
+      className={`dropdown-toggle btn ${className ?? ""}`}
+      {...props}
+    />
+  )
 }
 
 type InteractiveItemProps = {
