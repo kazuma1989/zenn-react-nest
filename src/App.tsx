@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import { Dialog } from "./Dialog_2"
 import { Dropdown as Dropdown_1 } from "./Dropdown_1"
 import { Dropdown } from "./Dropdown_2"
 
@@ -11,12 +12,12 @@ export function App() {
     setOpen1((v) => !v)
   }
 
-  const [open2, setOpen2] = useState(true)
-  const close2 = () => {
-    setOpen2(false)
+  const [open, setOpen] = useState(true)
+  const close = () => {
+    setOpen(false)
   }
-  const toggleOpen2 = () => {
-    setOpen2((v) => !v)
+  const toggleOpen = () => {
+    setOpen((v) => !v)
   }
 
   return (
@@ -96,14 +97,11 @@ export function App() {
 
       <div style={{ height: 350 }}>
         <Dropdown>
-          <Dropdown.Button
-            className="btn-outline-primary"
-            onClick={toggleOpen2}
-          >
+          <Dropdown.Button className="btn-outline-primary" onClick={toggleOpen}>
             メニュー
           </Dropdown.Button>
 
-          <Dropdown.Menu open={open2} onAction={close2}>
+          <Dropdown.Menu open={open} onAction={close}>
             <Dropdown.MenuHeader>ヘッダー</Dropdown.MenuHeader>
 
             <a href="#1" style={{ textDecoration: "none" }}>
@@ -154,32 +152,79 @@ export function App() {
         </Dropdown>
       </div>
 
-      <div style={{ height: 350, gridColumn: "1 / -1" }}>
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title">Modal title</h5>
+      <div style={{ gridColumn: "1 / -1" }}>
+        
+      </div>
 
-              <button type="button" className="close" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
+      <div style={{ gridColumn: "1 / -1" }}>
+        <Dialog>
+          <Dialog.Header>
+            <Dialog.HeaderTitle>ダイアログタイトル</Dialog.HeaderTitle>
 
-            <div className="modal-body">
-              <p>Modal body text goes here.</p>
-            </div>
+            <Dialog.HeaderCloseButton
+              onClick={() => {
+                console.log("close!")
+              }}
+            />
+          </Dialog.Header>
 
-            <div className="modal-footer">
-              <button type="button" className="btn btn-secondary">
-                Close
-              </button>
+          <Dialog.Body>
+            <p>中身</p>
+          </Dialog.Body>
 
-              <button type="button" className="btn btn-primary">
-                Save changes
-              </button>
-            </div>
-          </div>
+          <Dialog.Footer>
+            <Dialog.FooterButton className="btn-secondary">
+              キャンセル
+            </Dialog.FooterButton>
+
+            <Dialog.FooterButton className="btn-primary">
+              保存する
+            </Dialog.FooterButton>
+          </Dialog.Footer>
+        </Dialog>
+      </div>
+
+      <div style={{ gridColumn: "1 / -1" }}>
+        <Dialog>
+          <Dialog.Body>失敗しました</Dialog.Body>
+
+          <Dialog.Footer>
+            <Dialog.FooterButton className="btn-outline-primary">
+              はい
+            </Dialog.FooterButton>
+          </Dialog.Footer>
+        </Dialog>
+      </div>
+    </div>
+  )
+}
+
+export function Dialog_1({
+  title,
+  onClose,
+  children,
+}: {
+  title?: React.ReactNode
+  onClose?(): void
+  children?: React.ReactNode
+}) {
+  return (
+    <div className="modal-dialog">
+      <div className="modal-content">
+        <div className="modal-header">
+          <h5 className="modal-title">{title}</h5>
+
+          <button
+            type="button"
+            className="close"
+            aria-label="Close"
+            onClick={onClose}
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
+
+        <div className="modal-body">{children}</div>
       </div>
     </div>
   )
