@@ -24,7 +24,12 @@ export function App() {
         </a>
       </div>
 
-      <div className="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+      <div
+        className="px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center"
+        style={{
+          maxWidth: 700,
+        }}
+      >
         <h1 className="display-4">価格</h1>
         <p className="lead">
           この Bootstrap
@@ -34,7 +39,12 @@ export function App() {
         </p>
       </div>
 
-      <div className="container">
+      <div
+        className="container"
+        style={{
+          maxWidth: 960,
+        }}
+      >
         <div className="row row-cols-1 row-cols-md-3 mb-3 text-center">
           <div className="col">
             <div className="card mb-4 shadow-sm">
