@@ -1,4 +1,6 @@
 import React, { useState } from "react"
+import { DialogConfirm } from "./DialogConfirm"
+import { Dialog as Dialog_1 } from "./Dialog_1"
 import { Dialog } from "./Dialog_2"
 import { Dropdown as Dropdown_1 } from "./Dropdown_1"
 import { Dropdown } from "./Dropdown_2"
@@ -153,13 +155,29 @@ export function App() {
       </div>
 
       <div style={{ gridColumn: "1 / -1" }}>
-        
+        <Dialog_1
+          title="タイトル"
+          buttonCancel={{
+            label: "キャンセル",
+            onClick: () => {
+              console.log("キャンセル")
+            },
+          }}
+          buttonSubmit={{
+            label: "保存する",
+            onClick: () => {
+              console.log("保存する")
+            },
+          }}
+        >
+          <p>中身</p>
+        </Dialog_1>
       </div>
 
       <div style={{ gridColumn: "1 / -1" }}>
         <Dialog>
           <Dialog.Header>
-            <Dialog.HeaderTitle>ダイアログタイトル</Dialog.HeaderTitle>
+            <Dialog.HeaderTitle>タイトル</Dialog.HeaderTitle>
 
             <Dialog.HeaderCloseButton
               onClick={() => {
@@ -195,36 +213,16 @@ export function App() {
           </Dialog.Footer>
         </Dialog>
       </div>
-    </div>
-  )
-}
 
-export function Dialog_1({
-  title,
-  onClose,
-  children,
-}: {
-  title?: React.ReactNode
-  onClose?(): void
-  children?: React.ReactNode
-}) {
-  return (
-    <div className="modal-dialog">
-      <div className="modal-content">
-        <div className="modal-header">
-          <h5 className="modal-title">{title}</h5>
-
-          <button
-            type="button"
-            className="close"
-            aria-label="Close"
-            onClick={onClose}
-          >
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-
-        <div className="modal-body">{children}</div>
+      <div style={{ gridColumn: "1 / -1" }}>
+        <DialogConfirm
+          label="仕方ないな"
+          onConfirm={() => {
+            console.log("confirmed!")
+          }}
+        >
+          失敗しました
+        </DialogConfirm>
       </div>
     </div>
   )
