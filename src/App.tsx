@@ -33,7 +33,7 @@ export function App() {
         </nav>
 
         <Dropdown2
-          opener={{
+          openButton={{
             onClick: toggleOpen,
             className: "btn-outline-primary",
             children: "@kazuma1989 さん",
@@ -41,10 +41,6 @@ export function App() {
           open={open}
           onAction={close}
           items={[
-            {
-              itemType: "space",
-              children: "なんでも置ける",
-            },
             {
               itemType: "header",
               children: "ヘッダー",
@@ -71,7 +67,17 @@ export function App() {
             },
             {
               itemType: "button",
+              onClick: () => {
+                console.log("clicked!")
+              },
               children: "これはボタン",
+            },
+            {
+              itemType: "divider",
+            },
+            {
+              itemType: "space",
+              children: "なんでも置ける",
             },
             {
               itemType: "space",
@@ -96,26 +102,38 @@ export function App() {
           </Dropdown.Button>
 
           <Dropdown.Menu open={open} onAction={close}>
-            <Dropdown.MenuSpace>なんでも置ける</Dropdown.MenuSpace>
-
             <Dropdown.MenuHeader>ヘッダー</Dropdown.MenuHeader>
 
-            <Dropdown.MenuAnchor href="#">リンク</Dropdown.MenuAnchor>
+            <a href="#1" style={{ textDecoration: "none" }}>
+              <Dropdown.MenuItem>リンク</Dropdown.MenuItem>
+            </a>
 
-            <Dropdown.MenuAnchor
-              href="#"
-              style={{
-                paddingInlineStart: 32,
-              }}
-            >
-              インデント
-            </Dropdown.MenuAnchor>
+            <a href="#2" style={{ textDecoration: "none" }}>
+              <Dropdown.MenuItem
+                style={{
+                  paddingInlineStart: 32,
+                }}
+              >
+                インデント
+              </Dropdown.MenuItem>
+            </a>
 
             <Dropdown.MenuText>ただのテキスト</Dropdown.MenuText>
 
             <Dropdown.MenuDivider />
 
-            <Dropdown.MenuButton>これはボタン</Dropdown.MenuButton>
+            <Dropdown.MenuItem
+              as="button"
+              onClick={() => {
+                console.log("clicked!")
+              }}
+            >
+              これはボタン
+            </Dropdown.MenuItem>
+
+            <Dropdown.MenuDivider />
+
+            <Dropdown.MenuSpace>なんでも置ける</Dropdown.MenuSpace>
 
             <Dropdown.MenuSpace
               render={(onAction) => {
@@ -129,7 +147,7 @@ export function App() {
                   </button>
                 )
               }}
-            ></Dropdown.MenuSpace>
+            />
           </Dropdown.Menu>
         </Dropdown>
       </div>
@@ -406,55 +424,62 @@ Dropdown.Menu = function ({
   )
 }
 
-Dropdown.MenuAnchor = function ({
+Dropdown.MenuItem = function ({
+  as,
   active,
   disabled,
   onClick,
   ...props
-}: JSX.IntrinsicElements["a"] & {
+}: Omit<
+  React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>,
+  "ref"
+> & {
+  as?: "button"
   active?: boolean
   disabled?: boolean
 }) {
   const onAction = useContext(contextOnAction)
 
-  return (
-    <a
-      className={`dropdown-item ${active ? "active" : ""} ${
-        disabled ? "disabled" : ""
-      }`}
-      onClick={(e) => {
-        onAction?.()
-        onClick?.(e)
-      }}
-      {...props}
-    />
-  )
-}
+  switch (as) {
+    case "button": {
+      return (
+        <button
+          type="button"
+          aria-current={active}
+          disabled={disabled}
+          className={`dropdown-item ${active ? "active" : ""} ${
+            disabled ? "disabled" : ""
+          }`}
+          onClick={(e) => {
+            if (disabled) return
 
-Dropdown.MenuButton = function ({
-  active,
-  disabled,
-  onClick,
-  ...props
-}: JSX.IntrinsicElements["button"] & {
-  active?: boolean
-  disabled?: boolean
-}) {
-  const onAction = useContext(contextOnAction)
+            onAction?.()
+            onClick?.(e)
+          }}
+          {...props}
+        />
+      )
+    }
 
-  return (
-    <button
-      type="button"
-      className={`dropdown-item ${active ? "active" : ""} ${
-        disabled ? "disabled" : ""
-      }`}
-      onClick={(e) => {
-        onAction?.()
-        onClick?.(e)
-      }}
-      {...props}
-    />
-  )
+    default: {
+      return (
+        <span
+          aria-current={active}
+          aria-disabled={disabled}
+          className={`dropdown-item ${active ? "active" : ""} ${
+            disabled ? "disabled" : ""
+          }`}
+          onClick={(e) => {
+            if (disabled) return
+
+            onAction?.()
+            onClick?.(e)
+          }}
+          {...props}
+        />
+      )
+    }
+  }
 }
 
 Dropdown.MenuText = function ({ ...props }: JSX.IntrinsicElements["span"]) {
@@ -486,12 +511,12 @@ Dropdown.MenuSpace = function ({
 }
 
 function Dropdown2({
-  opener,
+  openButton,
   open,
   onAction,
   items,
 }: {
-  opener?: JSX.IntrinsicElements["button"]
+  openButton?: JSX.IntrinsicElements["button"]
   open?: boolean
   onAction?(): void
   items?: (
@@ -523,9 +548,9 @@ function Dropdown2({
   return (
     <div className="dropdown">
       <button
-        {...opener}
+        {...openButton}
         type="button"
-        className={`dropdown-toggle btn ${opener?.className ?? ""}`}
+        className={`dropdown-toggle btn ${openButton?.className ?? ""}`}
       />
 
       <div
@@ -539,10 +564,14 @@ function Dropdown2({
               return (
                 <a
                   key={i}
+                  aria-current={active}
+                  aria-disabled={disabled}
                   className={`dropdown-item ${active ? "active" : ""} ${
                     disabled ? "disabled" : ""
                   }`}
                   onClick={(e) => {
+                    if (disabled) return
+
                     onAction?.()
                     onClick?.(e)
                   }}
@@ -558,10 +587,14 @@ function Dropdown2({
                 <button
                   key={i}
                   type="button"
+                  aria-current={active}
+                  disabled={disabled}
                   className={`dropdown-item ${active ? "active" : ""} ${
                     disabled ? "disabled" : ""
                   }`}
                   onClick={(e) => {
+                    if (disabled) return
+
                     onAction?.()
                     onClick?.(e)
                   }}
