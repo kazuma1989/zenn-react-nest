@@ -157,6 +157,9 @@ export function App() {
       <div style={{ gridColumn: "1 / -1" }}>
         <Dialog_1
           title="タイトル"
+          onClose={() => {
+            console.log("閉じる")
+          }}
           buttonCancel={{
             label: "キャンセル",
             onClick: () => {
@@ -191,11 +194,21 @@ export function App() {
           </Dialog.Body>
 
           <Dialog.Footer>
-            <Dialog.FooterButton className="btn-secondary">
+            <Dialog.FooterButton
+              className="btn-secondary"
+              onClick={() => {
+                console.log("cancel!")
+              }}
+            >
               キャンセル
             </Dialog.FooterButton>
 
-            <Dialog.FooterButton className="btn-primary">
+            <Dialog.FooterButton
+              className="btn-primary"
+              onClick={() => {
+                console.log("submit!")
+              }}
+            >
               保存する
             </Dialog.FooterButton>
           </Dialog.Footer>
@@ -207,8 +220,13 @@ export function App() {
           <Dialog.Body>失敗しました</Dialog.Body>
 
           <Dialog.Footer>
-            <Dialog.FooterButton className="btn-outline-primary">
-              はい
+            <Dialog.FooterButton
+              className="btn-outline-primary"
+              onClick={() => {
+                console.log("confirmed!")
+              }}
+            >
+              いいよ
             </Dialog.FooterButton>
           </Dialog.Footer>
         </Dialog>
