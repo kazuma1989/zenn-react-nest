@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState } from "react"
 
 export function App() {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(!false)
   const close = () => {
     setOpen(false)
   }
@@ -32,14 +32,63 @@ export function App() {
           </a>
         </nav>
 
-        <Dropdown>
-          <button
-            type="button"
-            className="btn btn-outline-primary dropdown-toggle"
-            onClick={toggleOpen}
-          >
-            @kazuma1989 さん
-          </button>
+        <Dropdown2
+          opener={{
+            onClick: toggleOpen,
+            className: "btn-outline-primary",
+            children: "@kazuma1989 さん",
+          }}
+          open={open}
+          onAction={close}
+          items={[
+            {
+              itemType: "space",
+              children: "なんでも置ける",
+            },
+            {
+              itemType: "header",
+              children: "ヘッダー",
+            },
+            {
+              itemType: "anchor",
+              href: "#",
+              children: "リンク",
+            },
+            {
+              itemType: "anchor",
+              href: "#",
+              style: {
+                paddingInlineStart: 32,
+              },
+              children: "インデント",
+            },
+            {
+              itemType: "text",
+              children: "ただのテキスト",
+            },
+            {
+              itemType: "divider",
+            },
+            {
+              itemType: "button",
+              children: "これはボタン",
+            },
+            {
+              itemType: "space",
+              render: (onAction) => {
+                return (
+                  <button
+                    type="button"
+                    className="btn btn-outline-secondary"
+                    onClick={onAction}
+                  >
+                    なんかボタン
+                  </button>
+                )
+              },
+            },
+          ]}
+        />
 
         <Dropdown>
           <Dropdown.Button className="btn-outline-primary" onClick={toggleOpen}>
@@ -335,11 +384,6 @@ Dropdown.Button = function ({
   )
 }
 
-type InteractiveItemProps = {
-  active?: boolean
-  disabled?: boolean
-}
-
 const contextOnAction = createContext<(() => void) | undefined>(undefined)
 
 Dropdown.Menu = function ({
@@ -367,7 +411,10 @@ Dropdown.MenuAnchor = function ({
   disabled,
   onClick,
   ...props
-}: JSX.IntrinsicElements["a"] & InteractiveItemProps) {
+}: JSX.IntrinsicElements["a"] & {
+  active?: boolean
+  disabled?: boolean
+}) {
   const onAction = useContext(contextOnAction)
 
   return (
@@ -389,7 +436,10 @@ Dropdown.MenuButton = function ({
   disabled,
   onClick,
   ...props
-}: JSX.IntrinsicElements["button"] & InteractiveItemProps) {
+}: JSX.IntrinsicElements["button"] & {
+  active?: boolean
+  disabled?: boolean
+}) {
   const onAction = useContext(contextOnAction)
 
   return (
@@ -431,6 +481,123 @@ Dropdown.MenuSpace = function ({
   return (
     <div className="px-3 py-1" {...props}>
       {render ? render(onAction) : children}
+    </div>
+  )
+}
+
+function Dropdown2({
+  opener,
+  open,
+  onAction,
+  items,
+}: {
+  opener?: JSX.IntrinsicElements["button"]
+  open?: boolean
+  onAction?(): void
+  items?: (
+    | ({
+        itemType: "anchor"
+        active?: boolean
+        disabled?: boolean
+      } & JSX.IntrinsicElements["a"])
+    | ({
+        itemType: "button"
+        active?: boolean
+        disabled?: boolean
+      } & JSX.IntrinsicElements["button"])
+    | ({
+        itemType: "text"
+      } & JSX.IntrinsicElements["span"])
+    | ({
+        itemType: "header"
+      } & JSX.IntrinsicElements["h6"])
+    | {
+        itemType: "divider"
+      }
+    | ({
+        itemType: "space"
+        render?(onAction?: () => void): JSX.Element
+      } & JSX.IntrinsicElements["div"])
+  )[]
+}) {
+  return (
+    <div className="dropdown">
+      <button
+        {...opener}
+        type="button"
+        className={`dropdown-toggle btn ${opener?.className ?? ""}`}
+      />
+
+      <div
+        className={`dropdown-menu dropdown-menu-right ${open ? "show" : ""}`}
+      >
+        {items?.map((item, i) => {
+          switch (item.itemType) {
+            case "anchor": {
+              const { active, disabled, onClick, ...props } = item
+
+              return (
+                <a
+                  key={i}
+                  className={`dropdown-item ${active ? "active" : ""} ${
+                    disabled ? "disabled" : ""
+                  }`}
+                  onClick={(e) => {
+                    onAction?.()
+                    onClick?.(e)
+                  }}
+                  {...props}
+                />
+              )
+            }
+
+            case "button": {
+              const { active, disabled, onClick, ...props } = item
+
+              return (
+                <button
+                  key={i}
+                  type="button"
+                  className={`dropdown-item ${active ? "active" : ""} ${
+                    disabled ? "disabled" : ""
+                  }`}
+                  onClick={(e) => {
+                    onAction?.()
+                    onClick?.(e)
+                  }}
+                  {...props}
+                />
+              )
+            }
+
+            case "text": {
+              const { ...props } = item
+
+              return <span key={i} className="dropdown-item-text" {...props} />
+            }
+
+            case "header": {
+              const { ...props } = item
+
+              return <h6 key={i} className="dropdown-header" {...props} />
+            }
+
+            case "divider": {
+              return <hr key={i} className="dropdown-divider" />
+            }
+
+            case "space": {
+              const { render, children, ...props } = item
+
+              return (
+                <div key={i} className="px-3 py-1" {...props}>
+                  {render ? render(onAction) : children}
+                </div>
+              )
+            }
+          }
+        })}
+      </div>
     </div>
   )
 }
