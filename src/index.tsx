@@ -1,8 +1,12 @@
 import React from "react"
 import { render } from "react-dom"
+import { App } from "./App"
+import { GlobalStyle } from "./GlobalStyle"
 
-function App() {
-  return <h1>Hello</h1>
-}
-
-render(<App />, document.getElementById("app"))
+render(
+  <>
+    <GlobalStyle />
+    <App />
+  </>,
+  document.getElementById("app")
+)
