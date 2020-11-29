@@ -42,28 +42,28 @@ export function App() {
           </button>
 
           <Dropdown.Menu open={open} onAction={close}>
-            <Dropdown.Space>メニュー</Dropdown.Space>
+            <Dropdown.MenuSpace>なんでも置ける</Dropdown.MenuSpace>
 
-            <Dropdown.Header>メニュー</Dropdown.Header>
+            <Dropdown.MenuHeader>ヘッダー</Dropdown.MenuHeader>
 
-            <Dropdown.ItemAnchor
+            <Dropdown.MenuAnchor href="#">リンク</Dropdown.MenuAnchor>
+
+            <Dropdown.MenuAnchor
               href="#"
               style={{
                 paddingInlineStart: 32,
               }}
             >
-              Action
-            </Dropdown.ItemAnchor>
+              インデント
+            </Dropdown.MenuAnchor>
 
-            <Dropdown.ItemAnchor href="#">Another action</Dropdown.ItemAnchor>
+            <Dropdown.MenuText>ただのテキスト</Dropdown.MenuText>
 
-            <Dropdown.ItemText>メニュー</Dropdown.ItemText>
+            <Dropdown.MenuDivider />
 
-            <Dropdown.Divider />
+            <Dropdown.MenuButton>これはボタン</Dropdown.MenuButton>
 
-            <Dropdown.ItemButton>Something else here</Dropdown.ItemButton>
-
-            <Dropdown.Space
+            <Dropdown.MenuSpace
               render={(onAction) => {
                 return (
                   <button
@@ -75,7 +75,7 @@ export function App() {
                   </button>
                 )
               }}
-            ></Dropdown.Space>
+            ></Dropdown.MenuSpace>
           </Dropdown.Menu>
         </Dropdown>
       </div>
@@ -344,7 +344,7 @@ Dropdown.Menu = function ({
   )
 }
 
-Dropdown.ItemAnchor = function ({
+Dropdown.MenuAnchor = function ({
   active,
   disabled,
   onClick,
@@ -366,7 +366,7 @@ Dropdown.ItemAnchor = function ({
   )
 }
 
-Dropdown.ItemButton = function ({
+Dropdown.MenuButton = function ({
   active,
   disabled,
   onClick,
@@ -389,19 +389,19 @@ Dropdown.ItemButton = function ({
   )
 }
 
-Dropdown.ItemText = function ({ ...props }: JSX.IntrinsicElements["span"]) {
+Dropdown.MenuText = function ({ ...props }: JSX.IntrinsicElements["span"]) {
   return <span className="dropdown-item-text" {...props} />
 }
 
-Dropdown.Header = function ({ ...props }: JSX.IntrinsicElements["h6"]) {
+Dropdown.MenuHeader = function ({ ...props }: JSX.IntrinsicElements["h6"]) {
   return <h6 className="dropdown-header" {...props} />
 }
 
-Dropdown.Divider = function () {
+Dropdown.MenuDivider = function () {
   return <hr className="dropdown-divider" />
 }
 
-Dropdown.Space = function ({
+Dropdown.MenuSpace = function ({
   render,
   children,
   ...props
