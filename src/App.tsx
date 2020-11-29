@@ -1,6 +1,11 @@
-import React from "react"
+import React, { useState } from "react"
 
 export function App() {
+  const [open, setOpen] = useState(false)
+  const toggleOpen = () => {
+    setOpen((v) => !v)
+  }
+
   return (
     <div>
       <div className="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
@@ -24,37 +29,35 @@ export function App() {
           </a>
         </nav>
 
-        <a className="btn btn-outline-primary" href="#">
-          サインアップ
-        </a>
+        <div className="dropdown">
+          <button
+            type="button"
+            className="btn btn-outline-primary dropdown-toggle"
+            onClick={toggleOpen}
+          >
+            @kazuma1989 さん
+          </button>
 
-        <a
-          className="nav-link dropdown-toggle"
-          href="#"
-          id="navbarDropdownMenuLink"
-          role="button"
-          data-toggle="dropdown"
-          aria-expanded="false"
-        >
-          Dropdown link
-        </a>
-        <ul className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          <li>
-            <a className="dropdown-item" href="#">
-              Action
-            </a>
-          </li>
-          <li>
-            <a className="dropdown-item" href="#">
-              Another action
-            </a>
-          </li>
-          <li>
-            <a className="dropdown-item" href="#">
-              Something else here
-            </a>
-          </li>
-        </ul>
+          <ul className={`dropdown-menu ${open ? "show" : ""}`}>
+            <li>
+              <a className="dropdown-item" href="#">
+                Action
+              </a>
+            </li>
+
+            <li>
+              <a className="dropdown-item" href="#">
+                Another action
+              </a>
+            </li>
+
+            <li>
+              <a className="dropdown-item" href="#">
+                Something else here
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
 
       <div
