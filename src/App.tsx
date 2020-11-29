@@ -1,7 +1,10 @@
-import React, { useState } from "react"
+import React, { createContext, useContext, useState } from "react"
 
 export function App() {
-  const [open, setOpen] = useState(!false)
+  const [open, setOpen] = useState(false)
+  const close = () => {
+    setOpen(false)
+  }
   const toggleOpen = () => {
     setOpen((v) => !v)
   }
@@ -38,7 +41,7 @@ export function App() {
             @kazuma1989 さん
           </button>
 
-          <Dropdown.Menu open={open}>
+          <Dropdown.Menu open={open} onAction={close}>
             <Dropdown.Space>メニュー</Dropdown.Space>
 
             <Dropdown.Header>メニュー</Dropdown.Header>
@@ -306,17 +309,25 @@ function Dropdown({ children }: { children?: React.ReactNode }) {
   return <div className="dropdown">{children}</div>
 }
 
+const contextOnAction = createContext<(() => void) | undefined>(undefined)
+
 Dropdown.Menu = function ({
   open,
+  onAction,
   children,
 }: {
   open?: boolean
+  onAction?(): void
   children?: React.ReactNode
 }) {
   return (
-    <div className={`dropdown-menu dropdown-menu-right ${open ? "show" : ""}`}>
-      {children}
-    </div>
+    <contextOnAction.Provider value={onAction}>
+      <div
+        className={`dropdown-menu dropdown-menu-right ${open ? "show" : ""}`}
+      >
+        {children}
+      </div>
+    </contextOnAction.Provider>
   )
 }
 
@@ -328,13 +339,20 @@ type InteractiveItemProps = {
 Dropdown.ItemAnchor = function ({
   active,
   disabled,
+  onClick,
   ...props
 }: JSX.IntrinsicElements["a"] & InteractiveItemProps) {
+  const onAction = useContext(contextOnAction)
+
   return (
     <a
       className={`dropdown-item ${active ? "active" : ""} ${
         disabled ? "disabled" : ""
       }`}
+      onClick={(e) => {
+        onAction?.()
+        onClick?.(e)
+      }}
       {...props}
     />
   )
@@ -343,14 +361,21 @@ Dropdown.ItemAnchor = function ({
 Dropdown.ItemButton = function ({
   active,
   disabled,
+  onClick,
   ...props
 }: JSX.IntrinsicElements["button"] & InteractiveItemProps) {
+  const onAction = useContext(contextOnAction)
+
   return (
     <button
       type="button"
       className={`dropdown-item ${active ? "active" : ""} ${
         disabled ? "disabled" : ""
       }`}
+      onClick={(e) => {
+        onAction?.()
+        onClick?.(e)
+      }}
       {...props}
     />
   )
