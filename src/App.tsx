@@ -63,11 +63,19 @@ export function App() {
 
             <Dropdown.ItemButton>Something else here</Dropdown.ItemButton>
 
-            <Dropdown.Space>
-              <button type="button" className="btn btn-outline-secondary">
-                なんかボタン
-              </button>
-            </Dropdown.Space>
+            <Dropdown.Space
+              render={(onAction) => {
+                return (
+                  <button
+                    type="button"
+                    className="btn btn-outline-secondary"
+                    onClick={onAction}
+                  >
+                    なんかボタン
+                  </button>
+                )
+              }}
+            ></Dropdown.Space>
           </Dropdown.Menu>
         </Dropdown>
       </div>
@@ -309,6 +317,11 @@ function Dropdown({ children }: { children?: React.ReactNode }) {
   return <div className="dropdown">{children}</div>
 }
 
+type InteractiveItemProps = {
+  active?: boolean
+  disabled?: boolean
+}
+
 const contextOnAction = createContext<(() => void) | undefined>(undefined)
 
 Dropdown.Menu = function ({
@@ -329,11 +342,6 @@ Dropdown.Menu = function ({
       </div>
     </contextOnAction.Provider>
   )
-}
-
-type InteractiveItemProps = {
-  active?: boolean
-  disabled?: boolean
 }
 
 Dropdown.ItemAnchor = function ({
@@ -393,6 +401,18 @@ Dropdown.Divider = function () {
   return <hr className="dropdown-divider" />
 }
 
-Dropdown.Space = function ({ ...props }: JSX.IntrinsicElements["div"]) {
-  return <div className="px-3 py-1" {...props} />
+Dropdown.Space = function ({
+  render,
+  children,
+  ...props
+}: JSX.IntrinsicElements["div"] & {
+  render?(onAction?: () => void): JSX.Element
+}) {
+  const onAction = useContext(contextOnAction)
+
+  return (
+    <div className="px-3 py-1" {...props}>
+      {render ? render(onAction) : children}
+    </div>
+  )
 }
